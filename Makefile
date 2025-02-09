@@ -11,5 +11,21 @@ RESET = \033[0m
 
 all: $(NAME)
 
+$(NAME): $(OBJ)
+	@$(CC) $(OBJ) -o $(NAME)
+	@echo "$(GREEN)Compilation successful! Created $(NAME)$(RESET)"
+
 %.o: %.c philo.h
 	$(CC) $(FLAGS) -c $< -o $@
+
+clean:
+	@rm -f $(OBJ)
+	@echo "$(GREEN)Cleaned object files$(RESET)"
+
+fclean: clean
+	@rm -f $(NAME)
+	@echo "$(GREEN)Cleaned executable$(RESET)"
+
+re: fclean all
+
+.PHONY: all clean fclean re

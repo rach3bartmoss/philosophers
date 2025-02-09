@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/09 21:44:44 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:12:53 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	init_data(t_data *data, int ac, char **av)
 {
-	int	i;
-
-	i = 1;
 	data->n_philos = atoi(av[1]);
 	data->time_to_die = atoi(av[2]);
 	data->time_to_eat = atoi(av[3]);

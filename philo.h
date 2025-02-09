@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/09 21:44:11 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:08:09 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,22 @@
 # include <unistd.h>
 # include <pthread.h>
 
+enum e_state
+{
+	THINKING = 0,
+	SLEEPING = 1,
+	EATING = 2,
+	DEAD = 3,
+};
+
 typedef struct s_data
 {
-	int	n_philos;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	n_of_times_philos_eat;
+	int				n_philos;
+	int				time_to_die;
+	int				time_to_eat;
+	int				time_to_sleep;
+	int				n_of_times_philos_eat;
+	enum e_state	state;
 }				t_data;
 
 void	init_data(t_data *data, int ac, char **av);
