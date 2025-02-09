@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/09 21:44:11 by dopereir         ###   ########.fr       */
+/*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
+/*   Updated: 2025/02/09 21:44:44 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <pthread.h>
+#include "philo.h"
 
-typedef struct s_data
+void	init_data(t_data *data, int ac, char **av)
 {
-	int	n_philos;
-	int	time_to_die;
-	int	time_to_eat;
-	int	time_to_sleep;
-	int	n_of_times_philos_eat;
-}				t_data;
+	int	i;
 
-void	init_data(t_data *data, int ac, char **av);
-
-#endif
+	i = 1;
+	data->n_philos = atoi(av[1]);
+	data->time_to_die = atoi(av[2]);
+	data->time_to_eat = atoi(av[3]);
+	data->time_to_sleep = atoi(av[4]);
+	if (ac == 6)
+		data->n_of_times_philos_eat = atoi(av[5]);
+}
