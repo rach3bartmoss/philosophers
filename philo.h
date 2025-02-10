@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/09 22:08:09 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/10 18:55:11 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ typedef struct s_data
 }				t_data;
 
 void	init_data(t_data *data, int ac, char **av);
+//utils.c
+int	ft_atoi(const char *str);
 
 #endif
