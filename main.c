@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:02:27 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/09 22:03:57 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/09 22:16:48 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	main(int ac, char **av)
 {
 	if (ac < 4)
 	{
-		printf("Error\ninsuficient arguments\n");
+		printf("Error\nInsuficient Arguments\n");
 		return (0);
 	}
 
