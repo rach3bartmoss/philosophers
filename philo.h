@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/11 21:05:40 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/11 23:05:21 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ typedef struct s_data
 	int			time_to_sleep;
 	int			n_of_times_philos_eat;
 	long		start_time_ms;
+	pthread_t	thread_id;
+	int			philo_id;
 	t_status	status;
 }				t_data;
 
@@ -46,7 +48,7 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
-void	init_data(t_data *data, int ac, char **av);
+void	init_main_data(t_data *data, int ac, char **av);
 //utils.c
 int		ft_atoi(const char *str);
 //routines.c
