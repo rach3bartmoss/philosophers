@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:02:27 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/10 22:03:01 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/11 22:43:21 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	main(int ac, char **av)
 {
 	t_data		data = {0};
 
-	init_data(&data, ac, av);
+	init_main_data(&data, ac, av);
 
 	int			i;
 	int			thread_args[data.n_philos];
