@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/12 20:48:36 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/12 22:15:32 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ t_list	*create_node(t_data *data)
 	if (!new_node)
 		return NULL;
 	new_node->data = copy_data(data);
+	new_node->data.print_message = print_message;
 	if (pthread_mutex_init(&(new_node->fork), NULL) != 0)
 	{
 		free (new_node);
