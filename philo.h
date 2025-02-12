@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/12 20:53:00 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/12 22:15:10 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,16 @@ void	init_main_data(t_data *data, int ac, char **av);
 t_data	copy_data(t_data *data);
 t_list	*create_node(t_data *data);
 void	create_circularll_philos(t_list *head, t_data *data, int n);
+bool	init_philos_threads(t_list *head, int n_philos);
 //utils.c
 int		ft_atoi(const char *str);
 long	get_current_time_ms(void);
 void	print_message(t_data *data, const char *action);
 //routines.c
-void	*thread_function(void *arg);
+bool	try_pick_forks(t_list *philo);
+void	release_forks(t_list *philo);
+void	philosopher_eat(t_list *philo);
+void	*philosopher_routine(void *arg);
+
 
 #endif
