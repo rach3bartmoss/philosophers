@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/11 23:03:20 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/12 20:48:36 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@ void	init_main_data(t_data *data, int ac, char **av)
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
 	data->time_to_sleep = ft_atoi(av[4]);
+	data->philo_id = 0;
+	data->start_time_ms = 0;
 	if (ac == 6)
 		data->n_of_times_philos_eat = ft_atoi(av[5]);
+	else
+		data->n_of_times_philos_eat = 0;
 }
 
 t_data	copy_data(t_data *data)
@@ -32,6 +36,7 @@ t_data	copy_data(t_data *data)
 	new_data.time_to_sleep = data->time_to_sleep;
 	new_data.n_of_times_philos_eat = data->n_of_times_philos_eat;
 	new_data.status = THINKING; //default
+	new_data.philo_id = (data->philo_id) + 1;
 	return (new_data);
 }
 
@@ -78,42 +83,28 @@ void	create_circularll_philos(t_list *head, t_data *data, int n)
 	}
 }
 
-t_list	*init_philosophers(t_data *data)
+bool	init_philos_threads(t_list *head, int n_philos)
 {
-	t_list	*head;
-	t_list	*prev;
-	t_list	*node;
-	int	i;
+	t_list	*current;
+	long	start_time;
+	int		philo_num;
 
-	head = NULL;
-	prev = NULL;
-	i = 0;
-	while (i < data->n_philos)
+	if(!head)
+		return (false);
+	start_time = get_current_time_ms();
+	current = head;
+	philo_num = 1;
+	while (philo_num <= n_philos)
 	{
-		node = malloc(sizeof(t_list));
-		if (!node)
-			return (NULL);
-		node->data.n_philos = data->n_philos;
-		node->data.time_to_die = data->time_to_die;
-		node->data.time_to_eat = data->time_to_eat;
-		node->data.time_to_sleep = data->time_to_sleep;
-		node->data.n_of_times_philos_eat = data->n_of_times_philos_eat;
-		node->data.status = THINKING; //default
-		if (phthread_mutex_init(&node->fork, NULL) != 0)
+		current->data.start_time_ms = start_time;
+		current->data.philo_id = philo_num;
+		if (phread_create(&(current->data.thread_id), NULL,
+				philosopher_routine, (void *)current) != 0)
 		{
-			free (node);
-			return (NULL);
+			return (false);
 		}
-		node->prev = prev;
-		node->next = NULL;
-		if (prev)
-			prev->next = node;
-		else
-			head = node;
-		prev = node;
-		i++;
+		current = current->next;
+		philo_num++;
 	}
-	head->prev = node;
-	node->next = head;
-	return (head);
+	return (true);
 }
