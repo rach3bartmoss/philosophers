@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/12 22:15:32 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/13 21:19:03 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_list	*create_node(t_data *data)
 	if (!new_node)
 		return NULL;
 	new_node->data = copy_data(data);
-	new_node->data.print_message = print_message;
+	new_node->data.print_message = data->print_message;
 	if (pthread_mutex_init(&(new_node->fork), NULL) != 0)
 	{
 		free (new_node);
@@ -99,7 +99,7 @@ bool	init_philos_threads(t_list *head, int n_philos)
 	{
 		current->data.start_time_ms = start_time;
 		current->data.philo_id = philo_num;
-		if (phread_create(&(current->data.thread_id), NULL,
+		if (pthread_create(&(current->data.thread_id), NULL,
 				philosopher_routine, (void *)current) != 0)
 		{
 			return (false);
