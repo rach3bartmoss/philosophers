@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/12 22:17:27 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/13 21:23:06 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,17 @@ bool	try_pick_forks(t_list *philo)
 	if (philo->data.philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->fork);
-		print_message(philo, "has taken a fork");
+		print_message(&philo->data, "has taken a fork");
 		pthread_mutex_lock(&philo->prev->fork);
-		print_message(philo, "has taken a fork");
+		print_message(&philo->data, "has taken a fork");
 	}
 	else
 	{
 		usleep(100);
 		pthread_mutex_lock(&philo->prev->fork);
-		print_message(philo, "has taken a fork");
+		print_message(&philo->data, "has taken a fork");
 		pthread_mutex_lock(&philo->fork);
-		print_message(philo, "has taken a fork");
+		print_message(&philo->data, "has taken a fork");
 	}
 	return (true);
 }
@@ -47,7 +47,7 @@ void	release_forks(t_list *philo)
 
 void	philosopher_eat(t_list *philo)
 {
-	print_action(philo, "is eating");
+	print_message(&philo->data, "is eating");
 	philo->data.last_meal_time = get_current_time_ms();
 	usleep(philo->data.time_to_eat * 1000);
 }
@@ -65,10 +65,10 @@ void	*philosopher_routine(void *arg)
 		if (get_elapsed_time(philo->data.last_meal_time)
 			> philo->data.time_to_die)
 		{
-			print_message(philo, "died");
+			print_message(&philo->data, "died");
 			return (NULL);
 		}
-		print_message(philo, "is thinking");
+		print_message(&philo->data, "is thinking");
 		if (try_pick_forks(philo))
 		{
 			philosopher_eat(philo);
@@ -79,7 +79,7 @@ void	*philosopher_routine(void *arg)
 				if (philo->data.n_of_times_philos_eat == 0)
 					return (NULL);
 			}
-			print_message(philo, "is sleeping");
+			print_message(&philo->data, "is sleeping");
 			usleep(philo->data.time_to_sleep * 1000);
 		}
 	}
