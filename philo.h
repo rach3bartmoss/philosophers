@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/12 22:15:10 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/13 21:23:39 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,17 @@ bool	init_philos_threads(t_list *head, int n_philos);
 int		ft_atoi(const char *str);
 long	get_current_time_ms(void);
 void	print_message(t_data *data, const char *action);
+long	get_elapsed_time(long start_time_ms);
 //routines.c
 bool	try_pick_forks(t_list *philo);
 void	release_forks(t_list *philo);
 void	philosopher_eat(t_list *philo);
 void	*philosopher_routine(void *arg);
-
+//clean_up.c
+void	cleanup_node(t_list *node);
+void	cleanup_circular_list(t_list *head);
+void	cleanup_threads(t_list *head, int n_philos);
+void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
+			t_data *main_data);
 
 #endif
