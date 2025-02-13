@@ -6,21 +6,16 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/13 21:23:06 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/13 22:10:41 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-//here we must have all the behaviour of the philosophers
-//1)we must init the threads for each philo
-//	create forks, if a philo is has the two forks at disposal it eats
-//	how to create a data structutes to acomodate the philos at it forks
-// DEADLOCK CAUTION by make one philosopher lock 
-//the fork in reverse order, or create  ordering rule.
-
 bool	try_pick_forks(t_list *philo)
 {
+	if (check_if_simulation_should_stop(philo))
+		return (false);
 	if (philo->data.philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->fork);
@@ -36,7 +31,7 @@ bool	try_pick_forks(t_list *philo)
 		pthread_mutex_lock(&philo->fork);
 		print_message(&philo->data, "has taken a fork");
 	}
-	return (true);
+	return (!check_if_simulation_should_stop(philo));
 }
 
 void	release_forks(t_list *philo)
@@ -60,15 +55,15 @@ void	*philosopher_routine(void *arg)
 	philo->data.last_meal_time = get_current_time_ms();
 	if (philo->data.philo_id % 2 == 0)
 		usleep(1000);
-	while (1)
+	while (!check_if_simulation_should_stop(philo))
 	{
 		if (get_elapsed_time(philo->data.last_meal_time)
 			> philo->data.time_to_die)
 		{
 			print_message(&philo->data, "died");
+			stop_simulation(philo);
 			return (NULL);
 		}
-		print_message(&philo->data, "is thinking");
 		if (try_pick_forks(philo))
 		{
 			philosopher_eat(philo);
@@ -79,8 +74,13 @@ void	*philosopher_routine(void *arg)
 				if (philo->data.n_of_times_philos_eat == 0)
 					return (NULL);
 			}
-			print_message(&philo->data, "is sleeping");
-			usleep(philo->data.time_to_sleep * 1000);
+			if (!check_if_simulation_should_stop(philo))
+			{
+				print_message(&philo->data, "is sleeping");
+				usleep(philo->data.time_to_sleep * 1000);
+				if (!check_if_simulation_should_stop(philo))
+					print_message(&philo->data, "is thinking");
+			}
 		}
 	}
 	return (NULL);
