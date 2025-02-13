@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/13 21:23:39 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/13 22:06:28 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ typedef struct s_data
 	pthread_t		thread_id;
 	pthread_mutex_t	*print_message;
 	int				philo_id;
+	bool			*simulation_stop;
+	pthread_mutex_t	*stop_mutex;
 	t_status		status;
 }				t_data;
 
@@ -73,5 +75,7 @@ void	cleanup_circular_list(t_list *head);
 void	cleanup_threads(t_list *head, int n_philos);
 void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
 			t_data *main_data);
+bool	check_if_simulation_should_stop(t_list *philo);
+void	stop_simulation(t_list *philo);
 
 #endif
