@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/13 21:19:03 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/13 22:24:35 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,11 @@ t_data	copy_data(t_data *data)
 	new_data.time_to_eat = data->time_to_eat;
 	new_data.time_to_sleep = data->time_to_sleep;
 	new_data.n_of_times_philos_eat = data->n_of_times_philos_eat;
-	new_data.status = THINKING; //default
+	new_data.status = THINKING;
 	new_data.philo_id = (data->philo_id) + 1;
+	new_data.print_message = data->print_message;
+	new_data.simulation_stop = data->simulation_stop;
+	new_data.stop_mutex = data->stop_mutex;
 	return (new_data);
 }
 
@@ -61,7 +64,7 @@ t_list	*create_node(t_data *data)
 void	create_circularll_philos(t_list *head, t_data *data, int n)
 {
 	t_list	*new_node;
-	if (!head)
+	if (!head || !data)
 		return ;
 	t_list	*current = head;
 
@@ -71,7 +74,7 @@ void	create_circularll_philos(t_list *head, t_data *data, int n)
 		new_node = create_node(data);
 		if (!new_node)
 		{
-			//some cleanup
+			cleanup_circular_list(head);
 			return ;
 		}
 		new_node->prev = current;
