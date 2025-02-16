@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/16 21:53:51 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/16 22:25:04 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,11 @@ void	*philosopher_routine(void *arg)
 
 	philo = (t_list *)arg;
 	philo->data.last_meal_time = get_current_time_ms();
+	if (philo->data.n_philos == 1)
+	{
+		one_philo_handler(philo);
+		return (NULL);
+	}
 	if (philo->data.philo_id % 2 == 0)
 		usleep(1000);
 	while (!check_if_simulation_should_stop(philo))
