@@ -1,6 +1,7 @@
 NAME = philo
 
 SOURCES = main.c init_data.c utils.c routines.c clean_up.c utils2.c \
+			routines_helper.c \
 
 OBJ = $(SOURCES:.c=.o)
 CC = cc
