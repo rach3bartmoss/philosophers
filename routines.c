@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/13 22:10:41 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/16 21:53:51 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,13 @@ void	*philosopher_routine(void *arg)
 		}
 		if (try_pick_forks(philo))
 		{
+			if (get_elapsed_time(philo->data.last_meal_time) > philo->data.time_to_die)
+			{
+				print_message(&philo->data, "died");
+				stop_simulation(philo);
+				release_forks(philo);
+				return (NULL);
+			}
 			philosopher_eat(philo);
 			release_forks(philo);
 			if (philo->data.n_of_times_philos_eat > 0)
@@ -77,7 +84,17 @@ void	*philosopher_routine(void *arg)
 			if (!check_if_simulation_should_stop(philo))
 			{
 				print_message(&philo->data, "is sleeping");
-				usleep(philo->data.time_to_sleep * 1000);
+				long sleep_start = get_current_time_ms();
+				while (get_elapsed_time(sleep_start) < philo->data.time_to_sleep)
+				{
+					if (get_elapsed_time(philo->data.last_meal_time) > philo->data.time_to_die)
+					{
+						print_message(&philo->data, "died");
+						stop_simulation(philo);
+						return (NULL);
+					}
+					usleep(1000);
+				}
 				if (!check_if_simulation_should_stop(philo))
 					print_message(&philo->data, "is thinking");
 			}
