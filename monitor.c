@@ -26,6 +26,8 @@ void	*monitor_routine(void *arg)
 	long	current_time;
 
 	head = (t_list *)arg;
+	if (head->data.n_philos == 1)
+		return (NULL);
 	while (1)
 	{
 		current = head;
