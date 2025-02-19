@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/13 22:24:35 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:56:17 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,10 @@ bool	init_philos_threads(t_list *head, int n_philos)
 
 	if(!head)
 		return (false);
+	while (get_current_time_ms() % 1000 != 0)
+	{
+		;
+	}
 	start_time = get_current_time_ms();
 	current = head;
 	philo_num = 1;
