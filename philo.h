@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/19 22:55:16 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/19 23:41:41 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,10 @@ void	cleanup_circular_list(t_list *head);
 void	cleanup_threads(t_list *head, int n_philos);
 void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
 			t_data *main_data);
-//utils2.c
-bool	check_if_simulation_should_stop(t_list *philo);
-void	stop_simulation(t_list *philo);
-bool	check_and_handle_death(t_list *philo);
 //routine_helper.c
 void	one_philo_handler(t_list *philo);
+bool	check_if_simulation_should_stop(t_list *philo);
+void	stop_simulation(t_list *philo);
 //monitor.c
 void	*monitor_routine(void *arg);
 
