@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/17 00:49:04 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/18 23:45:48 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ typedef enum e_state
 typedef struct s_data
 {
 	int				n_philos;
-	int				time_to_die;
-	int				time_to_eat;
+	long			time_to_die;
+	long			time_to_eat;
 	long			last_meal_time;
-	int				time_to_sleep;
+	long			time_to_sleep;
 	int				n_of_times_philos_eat;
 	long			start_time_ms;
 	pthread_t		thread_id;
@@ -81,5 +81,7 @@ void	stop_simulation(t_list *philo);
 bool	check_and_handle_death(t_list *philo);
 //routine_helper.c
 void	one_philo_handler(t_list *philo);
+//monitor.c
+void	*monitor_routine(void *arg);
 
 #endif
