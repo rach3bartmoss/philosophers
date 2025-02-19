@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:31:52 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/13 22:17:30 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/19 23:00:15 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,11 @@ void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
 	t_data *main_data)
 {
 	if (head)
-	{
 		cleanup_threads(head, main_data->n_philos);
-		cleanup_circular_list(head);
-	}
+	cleanup_circular_list(head);
 	if (print_message)
 		pthread_mutex_destroy(print_message);
-	if (main_data->stop_mutex)
+	if (main_data->stop_mutex && main_data)
 		pthread_mutex_destroy(main_data->stop_mutex);
 	if (main_data)
 		free(main_data);
