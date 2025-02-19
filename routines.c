@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/17 00:57:50 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/19 01:17:09 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,46 @@ bool	try_pick_forks(t_list *philo)
 {
 	if (check_if_simulation_should_stop(philo))
 		return (false);
+	if (philo->data.philo_id % 2 != 0)
+	{
+		while (get_elapsed_time(philo->data.start_time_ms) < 1
+				&& !check_if_simulation_should_stop(philo))
+			;//busy wait
+	}
 	if (philo->data.philo_id % 2 == 0)
 	{
 		pthread_mutex_lock(&philo->fork);
+		if (check_if_simulation_should_stop(philo))
+		{
+			pthread_mutex_unlock(&philo->fork);
+			return (false);
+		}
 		print_message(&philo->data, "has taken a fork");
 		pthread_mutex_lock(&philo->prev->fork);
+		if (check_if_simulation_should_stop(philo))
+		{
+			pthread_mutex_unlock(&philo->fork);
+			pthread_mutex_unlock(&philo->prev->fork);
+			return (false);
+		}
 		print_message(&philo->data, "has taken a fork");
 	}
 	else
 	{
-		usleep(100);
 		pthread_mutex_lock(&philo->prev->fork);
+		if (check_if_simulation_should_stop(philo))
+		{
+			pthread_mutex_unlock(&philo->prev->fork);
+			return (false);
+		}
 		print_message(&philo->data, "has taken a fork");
 		pthread_mutex_lock(&philo->fork);
+		if (check_if_simulation_should_stop(philo))
+		{
+			pthread_mutex_unlock(&philo->prev->fork);
+			pthread_mutex_unlock(&philo->fork);
+			return (false);
+		}
 		print_message(&philo->data, "has taken a fork");
 	}
 	return (!check_if_simulation_should_stop(philo));
@@ -44,7 +71,31 @@ void	philosopher_eat(t_list *philo)
 {
 	print_message(&philo->data, "is eating");
 	philo->data.last_meal_time = get_current_time_ms();
-	usleep(philo->data.time_to_eat * 1000);
+	long	eat_start = get_current_time_ms();
+	
+	while (get_elapsed_time(eat_start) < philo->data.time_to_eat)
+	{
+		if (check_and_handle_death(philo))
+			return ;
+		long	remain = philo->data.time_to_eat - get_elapsed_time(eat_start);
+		if (remain > 1)
+			usleep(900);
+	}
+}
+
+void	philosopher_sleep(t_list *philo)
+{
+	print_message(&philo->data, "is sleeping");
+	long	sleep_start = get_current_time_ms();
+
+	while (get_elapsed_time(sleep_start) < philo->data.time_to_sleep)
+	{
+		if (check_and_handle_death(philo))
+			return ;
+		long	remain = philo->data.time_to_sleep - get_elapsed_time(sleep_start);
+		if (remain > 1)
+			usleep(900);
+	}
 }
 
 void	*philosopher_routine(void *arg)
@@ -59,18 +110,20 @@ void	*philosopher_routine(void *arg)
 		return (NULL);
 	}
 	if (philo->data.philo_id % 2 == 0)
-		usleep(1000);
+	{
+		while (get_elapsed_time(philo->data.start_time_ms) < 1
+				&& !check_if_simulation_should_stop(philo))
+			;
+	}
 	while (!check_if_simulation_should_stop(philo))
 	{
-		if (check_and_handle_death(philo))
-			return (NULL);
 		if (try_pick_forks(philo))
 		{
-			if (check_and_handle_death(philo))
+			if (check_if_simulation_should_stop(philo)) //---------
 			{
 				release_forks(philo);
-				return(NULL);
-			}
+				return (NULL);
+			}//-------------
 			philosopher_eat(philo);
 			release_forks(philo);
 			if (philo->data.n_of_times_philos_eat > 0)
@@ -81,14 +134,7 @@ void	*philosopher_routine(void *arg)
 			}
 			if (!check_if_simulation_should_stop(philo))
 			{
-				print_message(&philo->data, "is sleeping");
-				long	sleep_start = get_current_time_ms();
-				while (get_elapsed_time(sleep_start) < philo->data.time_to_sleep)
-				{
-					if (check_and_handle_death(philo))
-						return (NULL);
-					usleep(100);
-				}
+				philosopher_sleep(philo);
 				if (!check_if_simulation_should_stop(philo))
 					print_message(&philo->data, "is thinking");
 			}
