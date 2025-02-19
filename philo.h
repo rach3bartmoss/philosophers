@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/18 23:45:48 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/19 22:55:16 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +16,11 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <string.h>
 # include <aio.h>
 # include <time.h>
 # include <stdbool.h>
 # include <sys/time.h>
-
-typedef enum e_state
-{
-	THINKING = 0,
-	SLEEPING = 1,
-	EATING = 2,
-	DEAD = 3,
-}			t_status;
 
 typedef struct s_data
 {
@@ -43,7 +36,6 @@ typedef struct s_data
 	int				philo_id;
 	bool			*simulation_stop;
 	pthread_mutex_t	*stop_mutex;
-	t_status		status;
 }				t_data;
 
 typedef struct s_list
