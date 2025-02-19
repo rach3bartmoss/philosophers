@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:02:27 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/13 22:21:16 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/18 23:52:36 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ int	main(int ac, char **av)
 	bool			simulation_stop;
 	pthread_mutex_t	stop_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_t		monitor_thread;
 
 	if (!validate_input(ac, av))
 		return (1);
@@ -85,6 +86,8 @@ int	main(int ac, char **av)
 		cleanup_all(head, &print_mutex, main_data);
 		return (1);
 	}
+	pthread_create(&monitor_thread, NULL, monitor_routine, head);
+	pthread_join(monitor_thread, NULL);
 	cleanup_threads(head, main_data->n_philos);
 	cleanup_all(head, &print_mutex, main_data);
 	return (0);
