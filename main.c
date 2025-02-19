@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:02:27 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/18 23:52:36 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/19 23:02:16 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	main(int ac, char **av)
 	}
 	pthread_create(&monitor_thread, NULL, monitor_routine, head);
 	pthread_join(monitor_thread, NULL);
-	cleanup_threads(head, main_data->n_philos);
+	//cleanup_threads(head, main_data->n_philos);
 	cleanup_all(head, &print_mutex, main_data);
 	return (0);
 }
