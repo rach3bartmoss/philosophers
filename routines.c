@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/19 01:17:09 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/19 23:08:40 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,7 @@ bool	try_pick_forks(t_list *philo)
 		return (false);
 	if (philo->data.philo_id % 2 != 0)
 	{
-		while (get_elapsed_time(philo->data.start_time_ms) < 1
-				&& !check_if_simulation_should_stop(philo))
-			;//busy wait
+		usleep(100);
 	}
 	if (philo->data.philo_id % 2 == 0)
 	{
@@ -75,7 +73,7 @@ void	philosopher_eat(t_list *philo)
 	
 	while (get_elapsed_time(eat_start) < philo->data.time_to_eat)
 	{
-		if (check_and_handle_death(philo))
+		if (check_if_simulation_should_stop(philo))
 			return ;
 		long	remain = philo->data.time_to_eat - get_elapsed_time(eat_start);
 		if (remain > 1)
@@ -90,7 +88,7 @@ void	philosopher_sleep(t_list *philo)
 
 	while (get_elapsed_time(sleep_start) < philo->data.time_to_sleep)
 	{
-		if (check_and_handle_death(philo))
+		if (check_if_simulation_should_stop(philo))
 			return ;
 		long	remain = philo->data.time_to_sleep - get_elapsed_time(sleep_start);
 		if (remain > 1)
@@ -108,12 +106,6 @@ void	*philosopher_routine(void *arg)
 	{
 		one_philo_handler(philo);
 		return (NULL);
-	}
-	if (philo->data.philo_id % 2 == 0)
-	{
-		while (get_elapsed_time(philo->data.start_time_ms) < 1
-				&& !check_if_simulation_should_stop(philo))
-			;
 	}
 	while (!check_if_simulation_should_stop(philo))
 	{
