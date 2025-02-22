@@ -6,11 +6,32 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:02:27 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/19 23:02:16 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/21 22:52:07 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	ft_isnum(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
+static int	check_arg(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isnum(str[i]) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 static bool	validate_input(int ac, char **av)
 {
@@ -25,6 +46,11 @@ static bool	validate_input(int ac, char **av)
 	i = 1;
 	while (i < ac)
 	{
+		if (check_arg(av[i]) == 1)
+		{
+			printf("Error\nInput contains non-number character\n");
+			return (false);
+		}
 		value = ft_atoi(av[i]);
 		if (value <= 0)
 		{
