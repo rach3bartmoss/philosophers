@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/19 23:41:41 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/22 15:31:19 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
+//init_data.c
 void	init_main_data(t_data *data, int ac, char **av);
 t_data	copy_data(t_data *data);
 t_list	*create_node(t_data *data);
