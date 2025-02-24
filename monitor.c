@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:18:11 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/24 11:18:43 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:33:52 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ void	*monitor_routine(void *arg)
 	t_list	*current;
 	int		i;
 	int		finished_count;
-	long	r_time;
 
 	head = (t_list *)arg;
 	if (head->data.n_philos == 1)
@@ -121,8 +120,7 @@ void	*monitor_routine(void *arg)
 		current = head;
 		i = 0;
 		finished_count = 0;
-		r_time = 0;
-		if (monitor_helper_process_iteration(current, head, i, finished_count, r_time))
+		if (monitor_helper_process_iteration(current, head, i, finished_count))
 			return (NULL);
 		if (finished_count == head->data.n_philos)
 			return (monitor_helper_finish_count(head));

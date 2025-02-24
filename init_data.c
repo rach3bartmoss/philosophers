@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/22 15:49:52 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/24 11:32:22 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	init_main_data(t_data *data, int ac, char **av)
 	data->time_to_sleep = ft_atoi(av[4]);
 	data->philo_id = 0;
 	data->start_time_ms = 0;
+	data->r_time = 0;
 	if (ac == 6)
 		data->n_of_times_philos_eat = ft_atoi(av[5]);
 	else
@@ -40,6 +41,7 @@ t_data	copy_data(t_data *data)
 	new_data.print_message = data->print_message;
 	new_data.simulation_stop = data->simulation_stop;
 	new_data.stop_mutex = data->stop_mutex;
+	new_data.r_time = data->r_time;
 	return (new_data);
 }
 
