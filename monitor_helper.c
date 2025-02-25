@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/23 21:59:50 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/24 11:35:26 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/25 00:05:52 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	*monitor_helper_check_death(t_list *current, long current_time)
 		current_time - current->data.start_time_ms,
 		current->data.philo_id);
 	pthread_mutex_unlock(current->data.print_message);
-	printf("----------entry point trigged 1-----------\n");
 	return (NULL);
 }
 
