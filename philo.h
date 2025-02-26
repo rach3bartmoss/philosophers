@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/25 00:06:43 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/26 23:09:28 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
 void	one_philo_handler(t_list *philo);
 bool	check_if_simulation_should_stop(t_list *philo);
 void	stop_simulation(t_list *philo);
+bool	helper_pick_forks(t_list *philo);
 //monitor.c
 void	*monitor_routine(void *arg);
 void	*monitor_helper_check_death(t_list *current, long current_time);

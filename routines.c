@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/25 00:03:59 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/02/26 23:10:32 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,21 +20,8 @@ bool	try_pick_forks(t_list *philo)
 		usleep(100);
 	if (philo->data.philo_id % 2 == 0)
 	{
-		pthread_mutex_lock(&philo->fork);
-		if (check_if_simulation_should_stop(philo))
-		{
-			pthread_mutex_unlock(&philo->fork);
+		if (helper_pick_forks(philo) == false)
 			return (false);
-		}
-		print_message(&philo->data, "has taken a fork");
-		pthread_mutex_lock(&philo->prev->fork);
-		if (check_if_simulation_should_stop(philo))
-		{
-			pthread_mutex_unlock(&philo->fork);
-			pthread_mutex_unlock(&philo->prev->fork);
-			return (false);
-		}
-		print_message(&philo->data, "has taken a fork");
 	}
 	else
 	{
