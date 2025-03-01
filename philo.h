@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/01 05:20:17 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:44:54 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_data
 	pthread_mutex_t	*print_message;
 	int				philo_id;
 	bool			*simulation_stop;
+	bool			*main_simulation_stop;
 	long			r_time;
 	pthread_mutex_t	*stop_mutex;
 }				t_data;
@@ -91,6 +92,6 @@ void	*monitor_helper_check_death(t_list *current, long current_time);
 void	*monitor_helper_finish_count(t_list *head);
 //void	*monitor_helper_process_iteration(t_list *current, t_list *head,
 //			int i, int finished_count);
-t_stat	monitor_helper_process_iteration(t_list *head);
+t_stat	monitor_helper_process_iteration(t_list *head, int finished_count);
 
 #endif

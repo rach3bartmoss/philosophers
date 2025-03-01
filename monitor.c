@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:18:11 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/01 05:21:03 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:38:11 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,20 +55,23 @@
 	return (NULL);
 }*/
 
-void *monitor_routine(void *arg)
+void	*monitor_routine(void *arg)
 {
-	t_list				*head = (t_list *)arg;
+	t_list	*head;
 	t_stat	status;
+	int		finished_count;
 
+	finished_count = 0;
+	head = (t_list *)arg;
 	if (head->data.n_philos == 1)
-		return NULL;
+		return (NULL);
 	while (1)
 	{
-		status = monitor_helper_process_iteration(head);
+		status = monitor_helper_process_iteration(head, finished_count);
 		if (status == PHILOSOPHER_DIED)
-			return NULL;
+			return (NULL);
 		if (status == ALL_FINISHED)
-			return monitor_helper_finish_count(head);
+			return (monitor_helper_finish_count(head));
 		usleep(800);
 	}
 	return (NULL);
