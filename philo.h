@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/26 23:41:05 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:20:17 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,13 @@
 # include <time.h>
 # include <stdbool.h>
 # include <sys/time.h>
+
+typedef enum e_monitor_status
+{
+	STILL_RUNNING = 0,
+	PHILOSOPHER_DIED = 1,
+	ALL_FINISHED = 2,
+}			t_stat;
 
 typedef struct s_data
 {
@@ -58,10 +65,12 @@ int		ft_atoi(const char *str);
 long	get_current_time_ms(void);
 void	print_message(t_data *data, const char *action);
 long	get_elapsed_time(long start_time_ms);
+bool	check_if_simulation_should_stop(t_list *philo);
 //routines.c
 bool	try_pick_forks(t_list *philo);
 void	release_forks(t_list *philo);
 void	philosopher_eat(t_list *philo);
+void	philosopher_sleep(t_list *philo);
 void	*philosopher_routine(void *arg);
 //clean_up.c
 void	cleanup_node(t_list *node);
@@ -71,15 +80,17 @@ void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
 			t_data *main_data);
 //routine_helper.c
 void	one_philo_handler(t_list *philo);
-bool	check_if_simulation_should_stop(t_list *philo);
 void	stop_simulation(t_list *philo);
 bool	helper_pick_forks(t_list *philo);
 bool	helper_pick_forks_rev(t_list *philo);
+int		helper_philo_eat(t_list *philo);
 //monitor.c
 void	*monitor_routine(void *arg);
+//monitor_helper.c
 void	*monitor_helper_check_death(t_list *current, long current_time);
 void	*monitor_helper_finish_count(t_list *head);
-void	*monitor_helper_process_iteration(t_list *current, t_list *head,
-			int i, int finished_count);
+//void	*monitor_helper_process_iteration(t_list *current, t_list *head,
+//			int i, int finished_count);
+t_stat	monitor_helper_process_iteration(t_list *head);
 
 #endif
