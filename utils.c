@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:53:26 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/18 23:57:45 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:10:44 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,16 @@ void	print_message(t_data *data, const char *action)
 long	get_elapsed_time(long start_time_ms)
 {
 	return (get_current_time_ms() - start_time_ms);
+}
+
+bool	check_if_simulation_should_stop(t_list *philo)
+{
+	bool	should_stop;
+
+	if (!philo || !philo->data.simulation_stop || !philo->data.stop_mutex)
+		return (true);
+	pthread_mutex_lock(philo->data.stop_mutex);
+	should_stop = *philo->data.simulation_stop;
+	pthread_mutex_unlock(philo->data.stop_mutex);
+	return (should_stop);
 }
