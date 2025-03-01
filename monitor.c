@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:18:11 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/25 00:00:29 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:21:03 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 				if flag is set, the philosopher could gracefully exit
 				ensuting no extra actions from other threads*/
 
-void	*monitor_routine(void *arg)
+/*void	*monitor_routine(void *arg)
 {
 	t_list	*head;
 	t_list	*current;
@@ -50,6 +50,25 @@ void	*monitor_routine(void *arg)
 			return (NULL);
 		if (finished_count == head->data.n_philos)
 			return (monitor_helper_finish_count(head));
+		usleep(800);
+	}
+	return (NULL);
+}*/
+
+void *monitor_routine(void *arg)
+{
+	t_list				*head = (t_list *)arg;
+	t_stat	status;
+
+	if (head->data.n_philos == 1)
+		return NULL;
+	while (1)
+	{
+		status = monitor_helper_process_iteration(head);
+		if (status == PHILOSOPHER_DIED)
+			return NULL;
+		if (status == ALL_FINISHED)
+			return monitor_helper_finish_count(head);
 		usleep(800);
 	}
 	return (NULL);
