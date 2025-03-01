@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/26 23:41:31 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:18:40 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,17 @@ void	philosopher_eat(t_list *philo)
 		if (remain > 1)
 			usleep(900);
 	}
+	if (philo->data.n_of_times_philos_eat > 0)
+	{
+		if (helper_philo_eat(philo) != 1)
+			return ;
+	}
+	else if (philo->data.n_of_times_philos_eat == -1)
+	{
+		if (check_if_simulation_should_stop(philo))
+			return ;
+		print_message(&philo->data, "is sleeping");
+	}
 }
 
 void	philosopher_sleep(t_list *philo)
@@ -60,7 +71,6 @@ void	philosopher_sleep(t_list *philo)
 	long	sleep_start;
 	long	remain;
 
-	print_message(&philo->data, "is sleeping");
 	sleep_start = get_current_time_ms();
 	while (get_elapsed_time(sleep_start) < philo->data.time_to_sleep)
 	{
@@ -68,7 +78,7 @@ void	philosopher_sleep(t_list *philo)
 			return ;
 		remain = philo->data.time_to_sleep - get_elapsed_time(sleep_start);
 		if (remain > 1)
-			usleep(900);
+			usleep(1000);
 	}
 }
 
@@ -88,12 +98,8 @@ void	*philosopher_routine(void *arg)
 				return (release_forks(philo), NULL);
 			philosopher_eat(philo);
 			release_forks(philo);
-			if (philo->data.n_of_times_philos_eat > 0)
-			{
-				philo->data.n_of_times_philos_eat--;
-				if (philo->data.n_of_times_philos_eat == 0)
-					return (NULL);
-			}
+			if (philo->data.n_of_times_philos_eat == 0)
+				return (NULL);
 			if (!check_if_simulation_should_stop(philo))
 			{
 				philosopher_sleep(philo);
