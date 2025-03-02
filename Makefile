@@ -6,7 +6,7 @@ SOURCES = main.c init_data.c utils.c routines.c clean_up.c \
 
 OBJ = $(SOURCES:.c=.o)
 CC = cc
-FLAGS = -Wall -Wextra -Werror -pthread
+FLAGS = -Wall -Wextra -Werror -pthread -g
 
 GREEN = \033[0;32m
 RESET = \033[0m
