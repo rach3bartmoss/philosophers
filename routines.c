@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/01 05:18:40 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/01 06:08:34 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ void	philosopher_eat(t_list *philo)
 	long	eat_start;
 	long	remain;
 
-	print_message(&philo->data, "is eating");
 	philo->data.last_meal_time = get_current_time_ms();
+	print_message(&philo->data, "is eating");
 	eat_start = get_current_time_ms();
 	while (get_elapsed_time(eat_start) < philo->data.time_to_eat)
 	{

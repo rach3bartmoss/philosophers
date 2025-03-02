@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:31:52 by dopereir          #+#    #+#             */
-/*   Updated: 2025/02/19 23:00:15 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/02 17:12:49 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,32 @@ void	cleanup_threads(t_list *head, int n_philos)
 	}
 }
 
-void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
+void	cleanup_all(t_list *head, t_shared_mut *main_mutexes,
 	t_data *main_data)
 {
 	if (head)
 		cleanup_threads(head, main_data->n_philos);
 	cleanup_circular_list(head);
-	if (print_message)
-		pthread_mutex_destroy(print_message);
-	if (main_data->stop_mutex && main_data)
-		pthread_mutex_destroy(main_data->stop_mutex);
+	if (main_mutexes)
+	{
+		pthread_mutex_destroy(&main_mutexes->print_mutex);
+		pthread_mutex_destroy(&main_mutexes->stop_mutex);
+		free(main_mutexes);
+	}
 	if (main_data)
+	{
+		if (main_data->ticket_master)
+		{
+			pthread_mutex_destroy(&main_data->ticket_master->ticket_mutex);
+			free(main_data->ticket_master);
+			main_data->ticket_master = NULL;
+		}
+		if (main_data->simulation_stop)
+		{
+			free(main_data->simulation_stop);
+			main_data->simulation_stop = NULL;
+		}
 		free(main_data);
+		main_data = NULL;
+	}
 }

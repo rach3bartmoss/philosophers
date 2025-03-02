@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:18:11 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/01 05:38:11 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/02 14:19:55 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	*monitor_routine(void *arg)
 	head = (t_list *)arg;
 	if (head->data.n_philos == 1)
 		return (NULL);
+
 	while (1)
 	{
 		status = monitor_helper_process_iteration(head, finished_count);

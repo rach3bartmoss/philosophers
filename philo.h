@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/01 05:44:54 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/02 13:52:13 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,19 @@ typedef enum e_monitor_status
 	ALL_FINISHED = 2,
 }			t_stat;
 
+typedef struct	s_ticket
+{
+	pthread_mutex_t	ticket_mutex;
+	unsigned long	next_ticket;
+	unsigned long	current_ticket;
+}				t_ticket;
+
+typedef struct	s_shared_mutexes
+{
+	pthread_mutex_t	stop_mutex;
+	pthread_mutex_t	print_mutex;
+}				t_shared_mut;
+
 typedef struct s_data
 {
 	int				n_philos;
@@ -45,6 +58,7 @@ typedef struct s_data
 	bool			*main_simulation_stop;
 	long			r_time;
 	pthread_mutex_t	*stop_mutex;
+	t_ticket		*ticket_master;
 }				t_data;
 
 typedef struct s_list
@@ -56,42 +70,45 @@ typedef struct s_list
 }				t_list;
 
 //init_data.c
-void	init_main_data(t_data *data, int ac, char **av);
-t_data	copy_data(t_data *data);
-t_list	*create_node(t_data *data);
-void	create_circularll_philos(t_list *head, t_data *data, int n);
-bool	init_philos_threads(t_list *head, int n_philos);
+void			init_main_data(t_data *data, int ac, char **av);
+t_data			copy_data(t_data *data);
+t_list			*create_node(t_data *data);
+void			create_circularll_philos(t_list *head, t_data *data, int n);
+bool			init_philos_threads(t_list *head, int n_philos);
 //utils.c
-int		ft_atoi(const char *str);
-long	get_current_time_ms(void);
-void	print_message(t_data *data, const char *action);
-long	get_elapsed_time(long start_time_ms);
-bool	check_if_simulation_should_stop(t_list *philo);
+int				ft_atoi(const char *str);
+long long		get_current_time_ms(void);
+void			print_message(t_data *data, const char *action);
+long long		get_elapsed_time(long start_time_ms);
+bool			check_if_simulation_should_stop(t_list *philo);
 //routines.c
-bool	try_pick_forks(t_list *philo);
-void	release_forks(t_list *philo);
-void	philosopher_eat(t_list *philo);
-void	philosopher_sleep(t_list *philo);
-void	*philosopher_routine(void *arg);
+bool			try_pick_forks(t_list *philo);
+void			release_forks(t_list *philo);
+void			philosopher_eat(t_list *philo);
+void			philosopher_sleep(t_list *philo);
+void			*philosopher_routine(void *arg);
 //clean_up.c
-void	cleanup_node(t_list *node);
-void	cleanup_circular_list(t_list *head);
-void	cleanup_threads(t_list *head, int n_philos);
-void	cleanup_all(t_list *head, pthread_mutex_t *print_message,
-			t_data *main_data);
+void			cleanup_node(t_list *node);
+void			cleanup_circular_list(t_list *head);
+void			cleanup_threads(t_list *head, int n_philos);
+void			cleanup_all(t_list *head, t_shared_mut *main_mutexes,
+					t_data *main_data);
 //routine_helper.c
-void	one_philo_handler(t_list *philo);
-void	stop_simulation(t_list *philo);
-bool	helper_pick_forks(t_list *philo);
-bool	helper_pick_forks_rev(t_list *philo);
-int		helper_philo_eat(t_list *philo);
+void			one_philo_handler(t_list *philo);
+void			stop_simulation(t_list *philo);
+bool			helper_pick_forks(t_list *philo);
+bool			helper_pick_forks_rev(t_list *philo);
+int				helper_philo_eat(t_list *philo);
 //monitor.c
-void	*monitor_routine(void *arg);
+void			*monitor_routine(void *arg);
 //monitor_helper.c
-void	*monitor_helper_check_death(t_list *current, long current_time);
-void	*monitor_helper_finish_count(t_list *head);
-//void	*monitor_helper_process_iteration(t_list *current, t_list *head,
-//			int i, int finished_count);
-t_stat	monitor_helper_process_iteration(t_list *head, int finished_count);
-
+void			*monitor_helper_check_death(t_list *current, long current_time);
+void			*monitor_helper_finish_count(t_list *head);
+t_stat			monitor_helper_process_iteration(t_list *head, int finished_count);
+//main_helper.c
+t_shared_mut	*main_mutexes_init(t_data *main_data);
+//ticket_master.c
+void			finish_eating(t_ticket *ticket);
+void			wait_for_turn(t_ticket *ticket, unsigned long my_ticket);
+unsigned long	get_ticket(t_ticket *ticket);
 #endif
