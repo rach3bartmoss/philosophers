@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/01 06:08:34 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/02 18:59:15 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ void	philosopher_sleep(t_list *philo)
 
 void	*philosopher_routine(void *arg)
 {
-	t_list	*philo;
+	t_list			*philo;
+	unsigned long	my_ticket;
 
 	philo = (t_list *)arg;
 	philo->data.last_meal_time = get_current_time_ms();
@@ -92,10 +93,15 @@ void	*philosopher_routine(void *arg)
 		return (one_philo_handler(philo), NULL);
 	while (!check_if_simulation_should_stop(philo))
 	{
+		my_ticket = get_ticket(philo->data.ticket_master);
+		wait_for_turn(philo->data.ticket_master, my_ticket);
+		finish_eating(philo->data.ticket_master);
 		if (try_pick_forks(philo))
 		{
+			//finish_eating(philo->data.ticket_master);
 			if (check_if_simulation_should_stop(philo))
 				return (release_forks(philo), NULL);
+			
 			philosopher_eat(philo);
 			release_forks(philo);
 			if (philo->data.n_of_times_philos_eat == 0)
