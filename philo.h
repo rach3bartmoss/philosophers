@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/02 13:52:13 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:46:25 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,7 @@ typedef enum e_monitor_status
 	ALL_FINISHED = 2,
 }			t_stat;
 
-typedef struct	s_ticket
-{
-	pthread_mutex_t	ticket_mutex;
-	unsigned long	next_ticket;
-	unsigned long	current_ticket;
-}				t_ticket;
-
-typedef struct	s_shared_mutexes
+typedef struct s_shared_mutexes
 {
 	pthread_mutex_t	stop_mutex;
 	pthread_mutex_t	print_mutex;
@@ -58,7 +51,6 @@ typedef struct s_data
 	bool			*main_simulation_stop;
 	long			r_time;
 	pthread_mutex_t	*stop_mutex;
-	t_ticket		*ticket_master;
 }				t_data;
 
 typedef struct s_list
@@ -96,19 +88,22 @@ void			cleanup_all(t_list *head, t_shared_mut *main_mutexes,
 //routine_helper.c
 void			one_philo_handler(t_list *philo);
 void			stop_simulation(t_list *philo);
-bool			helper_pick_forks(t_list *philo);
-bool			helper_pick_forks_rev(t_list *philo);
+bool			helper_pick_forks(t_list *philo, t_list *f_fork,
+					t_list *s_fork);
 int				helper_philo_eat(t_list *philo);
+void			helper_routine_sync(t_list *philo);
 //monitor.c
 void			*monitor_routine(void *arg);
-//monitor_helper.c
 void			*monitor_helper_check_death(t_list *current, long current_time);
 void			*monitor_helper_finish_count(t_list *head);
-t_stat			monitor_helper_process_iteration(t_list *head, int finished_count);
+int				monitor_iteration_death(t_list *current);
+t_stat			monitor_helper_process_iteration(t_list *head,
+					int finished_count);
 //main_helper.c
 t_shared_mut	*main_mutexes_init(t_data *main_data);
-//ticket_master.c
-void			finish_eating(t_ticket *ticket);
-void			wait_for_turn(t_ticket *ticket, unsigned long my_ticket);
-unsigned long	get_ticket(t_ticket *ticket);
+t_shared_mut	*main_checks(t_data *main_data, t_shared_mut *main_mutexes);
+bool			main_trigged(t_list *head, t_data *main_data,
+					t_shared_mut *main_mutexes);
+//utils2.c
+bool			helper_routine_main_iteration(t_list *philo);
 #endif
