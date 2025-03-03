@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:18:11 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/02 14:19:55 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:13:51 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,29 +31,72 @@
 				if flag is set, the philosopher could gracefully exit
 				ensuting no extra actions from other threads*/
 
-/*void	*monitor_routine(void *arg)
+void	*monitor_helper_check_death(t_list *current, long current_time)
 {
-	t_list	*head;
+	*(current->data.simulation_stop) = true;
+	pthread_mutex_unlock(current->data.stop_mutex);
+	pthread_mutex_lock(current->data.print_message);
+	printf("%ld %d died\n",
+		current_time - current->data.start_time_ms,
+		current->data.philo_id);
+	pthread_mutex_unlock(current->data.print_message);
+	return (NULL);
+}
+
+void	*monitor_helper_finish_count(t_list *head)
+{
+	pthread_mutex_lock(head->data.stop_mutex);
+	*(head->data.simulation_stop) = true;
+	pthread_mutex_unlock(head->data.stop_mutex);
+	return (NULL);
+}
+
+int	monitor_iteration_death(t_list *current)
+{
+	current->data.r_time = get_current_time_ms();
+	if ((current->data.r_time - current->data.last_meal_time)
+		>= current->data.time_to_die)
+	{
+		pthread_mutex_lock(current->data.stop_mutex);
+		if (!*(current->data.simulation_stop))
+		{
+			pthread_mutex_unlock(current->data.stop_mutex);
+			monitor_helper_check_death(current, current->data.r_time);
+			return (1);
+		}
+		pthread_mutex_unlock(current->data.stop_mutex);
+	}
+	return (0);
+}
+
+t_stat	monitor_helper_process_iteration(t_list *head, int finished_count)
+{
 	t_list	*current;
 	int		i;
-	int		finished_count;
 
-	head = (t_list *)arg;
-	if (head->data.n_philos == 1)
-		return (NULL);
-	while (1)
+	current = head;
+	i = 0;
+	while (i < head->data.n_philos)
 	{
-		current = head;
-		i = 0;
-		finished_count = 0;
-		if (monitor_helper_process_iteration(current, head, i, finished_count))
-			return (NULL);
-		if (finished_count == head->data.n_philos)
-			return (monitor_helper_finish_count(head));
-		usleep(800);
+		if (check_if_simulation_should_stop(current))
+		{
+			current = current->next;
+			continue ;
+		}
+		if (current->data.n_of_times_philos_eat == 0)
+			finished_count++;
+		else
+		{
+			if (monitor_iteration_death(current) == 1)
+				return (PHILOSOPHER_DIED);
+		}
+		current = current->next;
+		i++;
 	}
-	return (NULL);
-}*/
+	if (finished_count == head->data.n_philos)
+		return (ALL_FINISHED);
+	return (STILL_RUNNING);
+}
 
 void	*monitor_routine(void *arg)
 {
@@ -65,7 +108,6 @@ void	*monitor_routine(void *arg)
 	head = (t_list *)arg;
 	if (head->data.n_philos == 1)
 		return (NULL);
-
 	while (1)
 	{
 		status = monitor_helper_process_iteration(head, finished_count);
