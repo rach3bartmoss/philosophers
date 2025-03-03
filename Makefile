@@ -1,13 +1,11 @@
 NAME = philo
 
 SOURCES = main.c init_data.c utils.c routines.c clean_up.c \
-			routines_helper.c monitor.c monitor_helper.c main_helper.c \
-			ticket_master.c
+			routines_helper.c monitor.c main_helper.c utils2.c \
 
 OBJ = $(SOURCES:.c=.o)
 CC = cc
 FLAGS = -Wall -Wextra -Werror -pthread -g
-
 GREEN = \033[0;32m
 RESET = \033[0m
 
