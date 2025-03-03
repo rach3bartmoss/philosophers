@@ -6,35 +6,54 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 19:45:37 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/02 18:59:15 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:22:07 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <unistd.h>
 
 bool	try_pick_forks(t_list *philo)
 {
+	t_list	*first_fork;
+	t_list	*second_fork;
+
 	if (check_if_simulation_should_stop(philo))
 		return (false);
-	if (philo->data.philo_id % 2 != 0)
-		usleep(100);
-	if (philo->data.philo_id % 2 == 0)
+	if (philo->data.philo_id % philo->data.n_philos
+		< (philo->data.philo_id + 1) % philo->data.n_philos)
 	{
-		if (helper_pick_forks(philo) == false)
-			return (false);
+		first_fork = philo;
+		second_fork = philo->prev;
 	}
 	else
 	{
-		if (helper_pick_forks_rev(philo) == false)
-			return (false);
+		first_fork = philo->prev;
+		second_fork = philo;
 	}
-	return (!check_if_simulation_should_stop(philo));
+	if (!helper_pick_forks(philo, first_fork, second_fork))
+		return (false);
+	return (true);
 }
 
 void	release_forks(t_list *philo)
 {
-	pthread_mutex_unlock(&philo->fork);
-	pthread_mutex_unlock(&philo->prev->fork);
+	t_list	*first_fork;
+	t_list	*second_fork;
+
+	if (philo->data.philo_id % philo->data.n_philos
+		< (philo->data.philo_id + 1) % philo->data.n_philos)
+	{
+		first_fork = philo;
+		second_fork = philo->prev;
+	}
+	else
+	{
+		first_fork = philo->prev;
+		second_fork = philo;
+	}
+	pthread_mutex_unlock(&second_fork->fork);
+	pthread_mutex_unlock(&first_fork->fork);
 }
 
 void	philosopher_eat(t_list *philo)
@@ -84,35 +103,29 @@ void	philosopher_sleep(t_list *philo)
 
 void	*philosopher_routine(void *arg)
 {
-	t_list			*philo;
-	unsigned long	my_ticket;
+	t_list	*philo;
 
 	philo = (t_list *)arg;
 	philo->data.last_meal_time = get_current_time_ms();
 	if (philo->data.n_philos == 1)
 		return (one_philo_handler(philo), NULL);
+	if (philo->data.philo_id % 2 == 0)
+		usleep((philo->data.time_to_eat * 100) / 2);
 	while (!check_if_simulation_should_stop(philo))
 	{
-		my_ticket = get_ticket(philo->data.ticket_master);
-		wait_for_turn(philo->data.ticket_master, my_ticket);
-		finish_eating(philo->data.ticket_master);
 		if (try_pick_forks(philo))
 		{
-			//finish_eating(philo->data.ticket_master);
-			if (check_if_simulation_should_stop(philo))
-				return (release_forks(philo), NULL);
-			
-			philosopher_eat(philo);
-			release_forks(philo);
-			if (philo->data.n_of_times_philos_eat == 0)
+			if (!helper_routine_main_iteration(philo))
 				return (NULL);
 			if (!check_if_simulation_should_stop(philo))
 			{
 				philosopher_sleep(philo);
 				if (!check_if_simulation_should_stop(philo))
-					print_message(&philo->data, "is thinking");
+					helper_routine_sync(philo);
 			}
 		}
+		else
+			usleep(100 + (philo->data.philo_id % 3) * 100);
 	}
 	return (NULL);
 }
