@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:02:27 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/02 15:50:54 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/03 19:00:50 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,34 +67,17 @@ int	main(int ac, char **av)
 	t_shared_mut	*main_mutexes;
 	pthread_t		monitor_thread;
 
-
 	if (!validate_input(ac, av))
 		return (1);
 	main_data = malloc(sizeof(t_data));
-	if (!main_data)
-	{
-		printf("Error\nMain data allocation failed\n");
-		return (1);
-	}
-	main_mutexes = main_mutexes_init(main_data);
+	main_mutexes = NULL;
+	main_mutexes = main_checks(main_data, main_mutexes);
 	if (!main_mutexes)
-	{
-		free(main_data);
 		return (1);
-	}
 	init_main_data(main_data, ac, av);
 	head = create_node(main_data);
-	if (!head)
-	{
-		cleanup_all(NULL, main_mutexes, main_data);
+	if (!main_trigged(head, main_data, main_mutexes))
 		return (1);
-	}
-	create_circularll_philos(head, main_data, main_data->n_philos);
-	if (!init_philos_threads(head, main_data->n_philos))
-	{
-		cleanup_all(head, main_mutexes, main_data);
-		return (1);
-	}
 	pthread_create(&monitor_thread, NULL, monitor_routine, head);
 	pthread_join(monitor_thread, NULL);
 	cleanup_all(head, main_mutexes, main_data);
