@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:31:52 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/02 17:12:49 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/03 18:26:52 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,6 @@ void	cleanup_all(t_list *head, t_shared_mut *main_mutexes,
 	}
 	if (main_data)
 	{
-		if (main_data->ticket_master)
-		{
-			pthread_mutex_destroy(&main_data->ticket_master->ticket_mutex);
-			free(main_data->ticket_master);
-			main_data->ticket_master = NULL;
-		}
 		if (main_data->simulation_stop)
 		{
 			free(main_data->simulation_stop);
