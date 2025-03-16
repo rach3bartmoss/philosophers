@@ -1,11 +1,16 @@
 NAME = philo
 
+SRC_DIR = srcs
+INC_DIR = includes
+OBJ_DIR = objs
+
 SOURCES = main.c init_data.c utils.c routines.c clean_up.c \
 			routines_helper.c monitor.c main_helper.c utils2.c \
 
-OBJ = $(SOURCES:.c=.o)
+SRC = $(addprefix $(SRC_DIR)/, $(SOURCES))
+OBJ = $(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
 CC = cc
-FLAGS = -Wall -Wextra -Werror -pthread -g
+FLAGS = -Wall -Wextra -Werror -pthread -g -I $(INC_DIR)
 GREEN = \033[0;32m
 RESET = \033[0m
 
@@ -15,11 +20,14 @@ $(NAME): $(OBJ)
 	@$(CC) $(OBJ) -o $(NAME)
 	@echo "$(GREEN)Compilation successful! Created $(NAME)$(RESET)"
 
-%.o: %.c philo.h
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/philo.h | $(OBJ_DIR)
 	$(CC) $(FLAGS) -c $< -o $@
 
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
 clean:
-	@rm -f $(OBJ)
+	@rm -rf $(OBJ_DIR)
 	@echo "$(GREEN)Cleaned object files$(RESET)"
 
 fclean: clean

@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:01:41 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/03 18:46:25 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:26:50 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <time.h>
 # include <stdbool.h>
 # include <sys/time.h>
+# include <stdatomic.h>
 
 typedef enum e_monitor_status
 {
@@ -32,6 +33,7 @@ typedef struct s_shared_mutexes
 {
 	pthread_mutex_t	stop_mutex;
 	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	eat_count_mutex;
 }				t_shared_mut;
 
 typedef struct s_data
@@ -41,7 +43,8 @@ typedef struct s_data
 	long			time_to_eat;
 	long			last_meal_time;
 	long			time_to_sleep;
-	int				n_of_times_philos_eat;
+	int				n_of_times_philos_eat;//here
+	pthread_mutex_t	*eat_count_mutex;//here
 	long			start_time_ms;
 	pthread_t		thread_id;
 	pthread_mutex_t	*print_message;
@@ -97,7 +100,7 @@ void			*monitor_helper_check_death(t_list *current, long current_time);
 void			*monitor_helper_finish_count(t_list *head);
 int				monitor_iteration_death(t_list *current);
 t_stat			monitor_helper_process_iteration(t_list *head,
-					int finished_count);
+					int finished_coun);
 //main_helper.c
 t_shared_mut	*main_mutexes_init(t_data *main_data);
 t_shared_mut	*main_checks(t_data *main_data, t_shared_mut *main_mutexes);
@@ -105,4 +108,7 @@ bool			main_trigged(t_list *head, t_data *main_data,
 					t_shared_mut *main_mutexes);
 //utils2.c
 bool			helper_routine_main_iteration(t_list *philo);
+void			routine_meal_lock_helper(t_list *philo);
+void			routine_stop_lock_helper(t_list *philo);
+long			monitor_eat_lock_helper(t_list *current);
 #endif

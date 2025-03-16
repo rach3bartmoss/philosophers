@@ -6,11 +6,24 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/02 12:00:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/03 18:46:47 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:03:13 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	helper_main_mutexes_init(t_shared_mut *main_muts)
+{
+	if (pthread_mutex_init(&main_muts->eat_count_mutex, NULL) != 0)
+	{
+		pthread_mutex_destroy(&main_muts->print_mutex);
+		pthread_mutex_destroy(&main_muts->stop_mutex);
+		free(main_muts);
+		printf("Error\nFailed to initialize eat_count_mutex\n");
+		return (1);
+	}
+	return (0);
+}
 
 t_shared_mut	*main_mutexes_init(t_data *main_data)
 {
@@ -31,10 +44,13 @@ t_shared_mut	*main_mutexes_init(t_data *main_data)
 		printf("Error\nFailed to initialize stop_mutex\n");
 		return (NULL);
 	}
+	if (helper_main_mutexes_init(main_muts) == 1)
+		return (NULL);
 	main_data->simulation_stop = malloc(sizeof(bool));
 	*(main_data->simulation_stop) = false;
 	main_data->stop_mutex = &main_muts->stop_mutex;
 	main_data->print_message = &main_muts->print_mutex;
+	main_data->eat_count_mutex = &main_muts->eat_count_mutex;
 	return (main_muts);
 }
 

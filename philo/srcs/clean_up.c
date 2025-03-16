@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 20:31:52 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/16 02:30:42 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:08:15 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	cleanup_all(t_list *head, t_shared_mut *main_mutexes,
 	{
 		pthread_mutex_destroy(&main_mutexes->print_mutex);
 		pthread_mutex_destroy(&main_mutexes->stop_mutex);
-		pthread_mutex_destroy(&main_mutexes->eat_count_mutex);//HERE
+		pthread_mutex_destroy(&main_mutexes->eat_count_mutex);
 		free(main_mutexes);
 	}
 	if (main_data)

@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/09 21:11:25 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/03 18:26:09 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 02:57:43 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_data	copy_data(t_data *data)
 	new_data.print_message = data->print_message;
 	new_data.simulation_stop = data->simulation_stop;
 	new_data.stop_mutex = data->stop_mutex;
+	new_data.eat_count_mutex = data->eat_count_mutex;
 	new_data.r_time = data->r_time;
 	return (new_data);
 }

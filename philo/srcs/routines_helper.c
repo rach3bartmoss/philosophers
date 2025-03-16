@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 22:20:20 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/16 02:35:47 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 03:07:01 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,10 @@ int	helper_philo_eat(t_list *philo)
 
 	if (check_if_simulation_should_stop(philo))
 		return (0);
-	pthread_mutex_lock(philo->data.eat_count_mutex);//
-	philo->data.n_of_times_philos_eat--;//here
+	pthread_mutex_lock(philo->data.eat_count_mutex);
+	philo->data.n_of_times_philos_eat--;
 	curr_eat_count = philo->data.n_of_times_philos_eat;
 	pthread_mutex_unlock(philo->data.eat_count_mutex);
-	/*if (philo->data.n_of_times_philos_eat != 0)
-		print_message(&philo->data, "is sleeping");
-	if (philo->data.n_of_times_philos_eat == 0)
-		return (0);*/
 	if (curr_eat_count != 0)
 		print_message(&philo->data, "is sleeping");
 	if (curr_eat_count == 0)
