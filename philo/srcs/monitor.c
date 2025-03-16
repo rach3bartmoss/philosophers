@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 23:18:11 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/16 03:27:02 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 10:06:58 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,12 @@
 void	*monitor_helper_check_death(t_list *current, long current_time)
 {
 	*(current->data.simulation_stop) = true;
-	pthread_mutex_unlock(current->data.stop_mutex);
 	pthread_mutex_lock(current->data.print_message);
 	printf("%ld %d died\n",
 		current_time - current->data.start_time_ms,
 		current->data.philo_id);
 	pthread_mutex_unlock(current->data.print_message);
+	pthread_mutex_unlock(current->data.stop_mutex);
 	return (NULL);
 }
 
