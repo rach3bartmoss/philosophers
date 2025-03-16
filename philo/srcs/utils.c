@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 18:53:26 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/01 06:09:50 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 10:11:11 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ long long	get_current_time_ms(void)
 void	print_message(t_data *data, const char *action)
 {
 	pthread_mutex_lock(data->print_message);
+	if (*(data->simulation_stop) == true)
+	{
+		pthread_mutex_unlock(data->print_message);
+		return ;
+	}
 	printf("%lld %d %s\n",
 		get_current_time_ms() - data->start_time_ms,
 		data->philo_id, action);
