@@ -6,7 +6,7 @@
 /*   By: dopereir <dopereir@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/16 22:20:20 by dopereir          #+#    #+#             */
-/*   Updated: 2025/03/03 18:07:45 by dopereir         ###   ########.fr       */
+/*   Updated: 2025/03/16 02:35:47 by dopereir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,21 @@ bool	helper_pick_forks(t_list *philo, t_list *f_fork, t_list *s_fork)
 
 int	helper_philo_eat(t_list *philo)
 {
+	int	curr_eat_count;
+
 	if (check_if_simulation_should_stop(philo))
 		return (0);
-	philo->data.n_of_times_philos_eat--;
-	if (philo->data.n_of_times_philos_eat != 0)
+	pthread_mutex_lock(philo->data.eat_count_mutex);//
+	philo->data.n_of_times_philos_eat--;//here
+	curr_eat_count = philo->data.n_of_times_philos_eat;
+	pthread_mutex_unlock(philo->data.eat_count_mutex);
+	/*if (philo->data.n_of_times_philos_eat != 0)
 		print_message(&philo->data, "is sleeping");
 	if (philo->data.n_of_times_philos_eat == 0)
+		return (0);*/
+	if (curr_eat_count != 0)
+		print_message(&philo->data, "is sleeping");
+	if (curr_eat_count == 0)
 		return (0);
 	return (1);
 }
