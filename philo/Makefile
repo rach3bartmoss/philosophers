@@ -10,14 +10,14 @@ SOURCES = main.c init_data.c utils.c routines.c clean_up.c \
 SRC = $(addprefix $(SRC_DIR)/, $(SOURCES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
 CC = cc
-FLAGS = -Wall -Wextra -Werror -pthread -g -I $(INC_DIR)
+FLAGS = -g -Wall -Wextra -Werror -pthread -I $(INC_DIR)
 GREEN = \033[0;32m
 RESET = \033[0m
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(OBJ) -o $(NAME)
+	@$(CC) $(FLAGS) $(OBJ) -o $(NAME)
 	@echo "$(GREEN)Compilation successful! Created $(NAME)$(RESET)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_DIR)/philo.h | $(OBJ_DIR)
